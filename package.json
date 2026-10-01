@@ -1,0 +1,131 @@
+{
+  "name": "winvsc-wslpy",
+  "displayName": "WSL Python Runner",
+  "icon": "media/icon.png",
+  "description": "Windows版VS Codeで開いたWSL上のPythonファイルを、WSLのPythonや.venvで実行します。",
+  "version": "0.1.1",
+  "publisher": "local-dev",
+  "license": "MIT",
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "keywords": [
+    "python",
+    "wsl",
+    "venv"
+  ],
+  "main": "./src/extension.js",
+  "extensionKind": [
+    "workspace"
+  ],
+  "activationEvents": [
+    "onLanguage:python"
+  ],
+  "capabilities": {
+    "untrustedWorkspaces": {
+      "supported": false
+    },
+    "virtualWorkspaces": {
+      "supported": false
+    }
+  },
+  "scripts": {
+    "test": "node --test test/*.test.js",
+    "test:wsl": "node scripts/verify-wsl.js",
+    "package": "vsce package --no-dependencies --allow-missing-repository"
+  },
+  "contributes": {
+    "commands": [
+      {
+        "command": "wslPython.runFile",
+        "title": "Python ファイルをWSLで実行",
+        "category": "WSL",
+        "icon": {
+          "light": "media/run-wsl-light.svg",
+          "dark": "media/run-wsl-dark.svg"
+        },
+        "enablement": "isWindows && !remoteName && isWorkspaceTrusted && wslPython.isWslFile"
+      }
+    ],
+    "menus": {
+      "editor/title": [
+        {
+          "command": "wslPython.runFile",
+          "when": "isWindows && !remoteName && isWorkspaceTrusted && resourceLangId == python && resourceScheme == file && wslPython.isWslFile",
+          "group": "navigation@10"
+        }
+      ],
+      "commandPalette": [
+        {
+          "command": "wslPython.runFile",
+          "when": "isWindows && !remoteName && wslPython.isWslFile"
+        }
+      ]
+    },
+    "taskDefinitions": [
+      {
+        "type": "wsl-python",
+        "required": [
+          "file",
+          "distribution"
+        ],
+        "properties": {
+          "file": {
+            "type": "string",
+            "description": "実行するLinux上のファイルパス"
+          },
+          "distribution": {
+            "type": "string",
+            "description": "WSLディストリビューション"
+          }
+        }
+      }
+    ],
+    "configuration": {
+      "title": "WSL Python Runner",
+      "properties": {
+        "wslPython.pythonPath": {
+          "type": "string",
+          "default": "",
+          "scope": "resource",
+          "markdownDescription": "WSL内のPython実行ファイル。空ならワークスペース直下の `.venv/bin/python`、次に `python3` を使用します。絶対パス、`~/...`、ワークスペースからの相対パス、PATH上のコマンド名を指定できます。"
+        },
+        "wslPython.args": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": [],
+          "scope": "resource",
+          "description": "Pythonスクリプトに渡す引数。各要素を1つの引数として渡します。"
+        },
+        "wslPython.cwd": {
+          "type": "string",
+          "enum": [
+            "workspaceFolder",
+            "fileDir"
+          ],
+          "enumDescriptions": [
+            "対象ファイルが属するワークスペースフォルダ",
+            "実行するファイルの親ディレクトリ"
+          ],
+          "default": "workspaceFolder",
+          "scope": "resource",
+          "description": "実行時のカレントディレクトリ。フォルダを開いていない場合はファイルの親ディレクトリを使います。"
+        },
+        "wslPython.wslExecutable": {
+          "type": "string",
+          "default": "wsl.exe",
+          "scope": "machine",
+          "description": "Windows側のwsl.exeのパス。通常は変更不要です。"
+        }
+      }
+    }
+  },
+  "devDependencies": {
+    "@vscode/vsce": "^4.0.0"
+  }
+}
