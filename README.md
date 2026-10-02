@@ -6,7 +6,7 @@ Windows版VS CodeでWSL上のフォルダをUNCパスから開き、エディタ
 
 ## インストールと使い方
 
-1. **Windows版VS Code** の拡張機能ビューで `…` → **「VSIX からのインストール…」** を選び、[winvsc-wslpy-0.1.1.vsix](winvsc-wslpy-0.1.1.vsix) をインストールします。
+1. **Windows版VS Code** の拡張機能ビューで `…` → **「VSIX からのインストール…」** を選び、[winvsc-wslpy-0.1.1.vsix](https://github.com/tmpnokaikaku/WinVSC-WSLPy/raw/refs/heads/main/winvsc-wslpy-0.1.1.vsix) をインストールします。
 2. **「フォルダーを開く…」** で、例えば `\\wsl.localhost\Ubuntu\home\user\project` を開きます。`\\wsl$\Ubuntu\home\user\project` 形式にも対応します。
 3. フォルダを信頼し、Pythonファイルを開いて右上のWSL実行ボタンを押します。コマンドパレットの **「WSL: Python ファイルをWSLで実行」** からも実行できます。
 4. 未保存の変更があれば対象ファイルを保存してから実行します。出力はVS Codeの統合ターミナルに表示されます。`input()` への入力や `Ctrl+C` での停止ができます。
